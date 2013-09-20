@@ -13,14 +13,14 @@ module PartyTime
     opts = options.merge('apikey' => PartyTime::Config.api_key, 'format' => 'json')
     url = base_url + endpoint + "?" + opts.to_query
     # puts url
-    response = JSON.parse(RestClient.get(url).to_str).collect {|i| Hashie::Mash.new(i) }
+    response = Hashie::Mash.new(JSON.parse(RestClient.get(url).to_str))
     response
   end
 end
 
 class Hash 
   def to_query 
-    self.map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v)}"}.join("&") 
+    self.map{|k,v| "#{CGI.escape(k.to_s)}=#{CGI.escape(v.to_s)}"}.join("&") 
   end 
 end
 
